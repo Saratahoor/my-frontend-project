@@ -19,7 +19,7 @@ const AdminLayout = () => {
         initial={{ x: -40, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="w-64 h-screen p-6 bg-white bg-opacity-30 backdrop-blur-md shadow-xl flex flex-col justify-between"
+        className="fixed w-64 h-screen p-6 bg-white bg-opacity-30 backdrop-blur-md shadow-xl flex flex-col justify-between"
       >
         {/* Top - Navigation */}
         <div className="flex flex-col gap-4">
@@ -46,7 +46,7 @@ const AdminLayout = () => {
       </motion.div>
 
       {/* Main Content Area */}
-      <div className="flex-1 p-10 overflow-y-auto">
+      <div className="flex-1 ml-64 p-10 overflow-y-auto">
         <Outlet />
       </div>
     </div>

@@ -1,6 +1,8 @@
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import { apiGetMediators } from "../../utils/apiAdmin";
 
-const mediators = [
+const mediators2 = [
   {
     address: { city: "Delhi", state: "Delhi", country: "India" },
     _id: "MED1001",
@@ -45,7 +47,19 @@ const mediators = [
   },
 ];
 
+function getMediators() {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["mediators"],
+    queryFn: apiGetMediators,
+  });
+  return { data, isLoading, isError };
+}
+
 function CheckMediators() {
+  const { data: mediators, isLoading } = getMediators();
+
+  if (isLoading) return <h1>Loading...</h1>;
+
   return (
     <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {mediators.map((mediator) => (
@@ -54,15 +68,17 @@ function CheckMediators() {
           className="bg-white shadow-lg rounded-xl overflow-hidden flex flex-col items-center p-6 hover:shadow-2xl transition"
         >
           <div className="flex flex-col items-center mb-4">
-            <img
-              src={mediator.profile_pic || "https://i.pravatar.cc/150?u=fallback"}
+            {/* <img
+              src={
+                mediator.profile_pic || "https://i.pravatar.cc/150?u=fallback"
+              }
               alt={mediator.full_name}
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.src = "https://i.pravatar.cc/150?u=fallback";
               }}
               className="w-28 h-28 rounded-full object-cover border-4 border-white shadow-md"
-            />
+            /> */}
             <h2 className="text-xl font-bold text-gray-900 mt-3">
               {mediator.full_name}
             </h2>
@@ -73,7 +89,9 @@ function CheckMediators() {
           </div>
 
           <div className="text-sm text-gray-700 space-y-1 w-full">
-            <p>📍 {mediator.address.city}, {mediator.address.state}</p>
+            <p>
+              📍 {mediator.address.city}, {mediator.address.state}
+            </p>
             <p>📞 {mediator.number}</p>
             <p>📧 {mediator.email}</p>
             <p>🗣️ Languages: {mediator.languages_spoken.join(", ")}</p>
@@ -81,9 +99,21 @@ function CheckMediators() {
             <p>🎓 {mediator.education_qualification.join(", ")}</p>
             <p>💼 {mediator.years_of_experience} yrs experience</p>
             <p>💰 ₹{mediator.price} per case</p>
-            <p>🧭 Mode: {mediator.mode} | Level: {mediator.level}</p>
-            <p>📌 Status: <span className="text-blue-600 font-medium">{mediator.status}</span></p>
-            <p>✔ <span className="text-green-600">{mediator.verification_status}</span></p>
+            <p>
+              🧭 Mode: {mediator.mode} | Level: {mediator.level}
+            </p>
+            <p>
+              📌 Status:{" "}
+              <span className="text-blue-600 font-medium">
+                {mediator.status}
+              </span>
+            </p>
+            <p>
+              ✔{" "}
+              <span className="text-green-600">
+                {mediator.verification_status}
+              </span>
+            </p>
           </div>
         </div>
       ))}

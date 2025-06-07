@@ -17,7 +17,7 @@ export default function UserLayout() {
         initial={{ x: -40, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="w-64 h-screen p-6 bg-white bg-opacity-30 backdrop-blur-md shadow-xl flex flex-col justify-between"
+        className="fixed w-64 h-screen p-6 bg-white bg-opacity-30 backdrop-blur-md shadow-xl flex flex-col justify-between"
       >
         <div className="flex flex-col gap-4">
           <h1 className="text-3xl font-bold mb-6">Nyaya Path</h1>
@@ -42,7 +42,7 @@ export default function UserLayout() {
       </motion.div>
 
       {/* Main Content */}
-      <div className="flex-1 p-10">
+      <div className="flex-1 ml-64 p-10">
         <Outlet />
       </div>
     </div>

@@ -1,5 +1,23 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useLoginData from "../Auth/useLoginData";
+import { useForm } from "react-hook-form";
+import { apiFileCase } from "../../utils/apiUser";
+import toast from "react-hot-toast";
+
+function useFileCase() {
+  const query = useQueryClient();
+  const { mutate: bookCase, isPending: isLoading } = useMutation({
+    mutationFn: (data) => apiFileCase(data),
+    onSuccess: (data) => {
+      toast.success(data.message);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  return { bookCase, isLoading };
+}
 
 function FileCase() {
   const {
@@ -8,25 +26,50 @@ function FileCase() {
     formState: { errors },
   } = useForm();
 
+  const { data: UserData, isLoading } = useLoginData();
+  const { bookCase, isLoading: booking } = useFileCase();
+
   const onSubmit = (data) => {
-    console.log('Form Data:', data);
+    bookCase({ user_id: UserData.linked_id, ...data });
   };
 
   const indianLanguages = [
-    "English", "Hindi", "Bengali", "Telugu", "Marathi", "Tamil", "Urdu",
-    "Gujarati", "Kannada", "Odia", "Malayalam", "Punjabi", "Assamese",
-    "Maithili", "Santali", "Kashmiri", "Nepali", "Konkani", "Sindhi", "Dogri"
+    "English",
+    "Hindi",
+    "Bengali",
+    "Telugu",
+    "Marathi",
+    "Tamil",
+    "Urdu",
+    "Gujarati",
+    "Kannada",
+    "Odia",
+    "Malayalam",
+    "Punjabi",
+    "Assamese",
+    "Maithili",
+    "Santali",
+    "Kashmiri",
+    "Nepali",
+    "Konkani",
+    "Sindhi",
+    "Dogri",
   ];
+
+  if (isLoading || booking) return <h1>Loading...</h1>;
 
   return (
     <div className="min-h-screen flex items-start justify-center pt-24 px-4">
       <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">File a Case</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
+          File a Case
+        </h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-
           {/* Mode Dropdown */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Mode</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Mode
+            </label>
             <select
               {...register("mode", { required: true })}
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
@@ -35,34 +78,48 @@ function FileCase() {
               <option value="Online">Online</option>
               <option value="Offline">Offline</option>
             </select>
-            {errors.mode && <p className="text-red-500 text-sm mt-1">Mode is required.</p>}
+            {errors.mode && (
+              <p className="text-red-500 text-sm mt-1">Mode is required.</p>
+            )}
           </div>
 
           {/* Case Type Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Case Type</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Case Type
+            </label>
             <input
               type="text"
               placeholder="e.g., Property Dispute"
               {...register("case_type", { required: true })}
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
             />
-            {errors.case_type && <p className="text-red-500 text-sm mt-1">Case type is required.</p>}
+            {errors.case_type && (
+              <p className="text-red-500 text-sm mt-1">
+                Case type is required.
+              </p>
+            )}
           </div>
 
           {/* Language Dropdown */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Language</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Language
+            </label>
             <select
               {...register("language", { required: true })}
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
             >
               <option value="">Select Language</option>
               {indianLanguages.map((lang) => (
-                <option key={lang} value={lang}>{lang}</option>
+                <option key={lang} value={lang}>
+                  {lang}
+                </option>
               ))}
             </select>
-            {errors.language && <p className="text-red-500 text-sm mt-1">Language is required.</p>}
+            {errors.language && (
+              <p className="text-red-500 text-sm mt-1">Language is required.</p>
+            )}
           </div>
 
           {/* Submit Button */}
