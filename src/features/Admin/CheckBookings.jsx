@@ -56,9 +56,6 @@ function CheckBookings() {
                 Booking ID: {booking._id}
               </h2>
               <p className="text-sm text-gray-700">
-                Case ID: {booking.case_id}
-              </p>
-              <p className="text-sm text-gray-700">
                 Created By: {booking.created_by}
               </p>
               <p className="text-sm text-gray-700">
@@ -73,6 +70,16 @@ function CheckBookings() {
               <p className="text-sm text-gray-700">
                 Booking Mode: {booking.booking_mode}
               </p>
+              <p>
+                <strong>Contact Numbers:</strong>
+              </p>
+              <ul className="list-disc pl-5">
+                {booking.phone_number?.map((phone, index) => (
+                  <li key={index} className="text-gray-700">
+                    {phone}
+                  </li>
+                ))}
+              </ul>
               <p
                 className={`text-sm font-medium underline ${
                   booking.status === "In Progress"

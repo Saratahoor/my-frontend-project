@@ -24,6 +24,8 @@ import CheckCases from "./features/Mediator/CheckCases";
 import LoginForm from "./components/LoginForm";
 import RegistrationForm from "./components/RegisterForm";
 
+import Chatbot from "./components/ui/ChatBot";
+
 import AuthRoutesProtector from "./features/Protectors/AuthRoutesProtector";
 import AdminRoutesProtector from "./features/Protectors/AdminRoutesProtector";
 import UserRoutesProtector from "./features/Protectors/UserRoutesProtector";
@@ -33,6 +35,7 @@ const MainLayout = () => {
   return (
     <div className="bg-gradient-to-r from-orange-500 via-white to-green-500 min-h-screen flex items-center justify-center">
       <Outlet />
+      <Chatbot />
     </div>
   );
 };

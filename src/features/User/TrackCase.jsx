@@ -16,13 +16,15 @@ function TrackCase() {
     refetch,
     isFetching,
   } = useQuery({
-    queryKey: ["track-my-case", searchId, UserData?.linked_id],
+    queryKey: ["track-my-case"],
     queryFn: () =>
       apiTrackMyCase({
         user_id: UserData.linked_id,
         case_id: searchId.trim(),
       }),
     enabled: false,
+    staleTime: Infinity,
+    cacheTime: 0,
   });
 
   const handleTrack = async () => {
@@ -30,8 +32,8 @@ function TrackCase() {
     if (!searchId.trim()) return;
 
     const { data } = await refetch();
+    if (data.error) setCaseResult({ error: data.message });
     if (data.data) setCaseResult(data.data);
-    else setCaseResult(data.error || { error: "Case not found" });
     setSearchId("");
   };
 
@@ -89,6 +91,18 @@ function TrackCase() {
             <p>
               <strong>Priority:</strong> {caseResult.priority}
             </p>
+            {caseResult.schedule && (
+              <>
+                <p>
+                  <strong>Schedule Date:</strong>{" "}
+                  {new Date(caseResult.schedule.schedule_date).toLocaleString()}
+                </p>
+                <p>
+                  <strong>Booking Mode:</strong>{" "}
+                  {caseResult.schedule.booking_mode}
+                </p>
+              </>
+            )}
             {caseResult.location && (
               <p>
                 <strong>Location:</strong> {caseResult.location}
@@ -100,11 +114,30 @@ function TrackCase() {
               </p>
             )}
             <p>
-              <strong>Parties:</strong> {caseResult.parties.join(", ")}
+              <strong>Parties:</strong> {caseResult.parties?.join(", ")}
             </p>
             <p>
               <strong>Mediator(s):</strong> {caseResult.assigned_mediator}
             </p>
+            {caseResult.meet_link && (
+              <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                <p className="text-sm text-gray-700">
+                  <strong>Next Meeting:</strong>{" "}
+                  {new Date(caseResult.scheduled_date).toLocaleString()}
+                </p>
+                <p className="text-sm">
+                  <strong>Meet Link:</strong>{" "}
+                  <a
+                    href={caseResult.meet_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 underline"
+                  >
+                    Join Meeting
+                  </a>
+                </p>
+              </div>
+            )}
           </div>
         )}
       </div>
