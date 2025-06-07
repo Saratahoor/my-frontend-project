@@ -1,8 +1,16 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const UserDashboard = () => {
   const [selectedOption, setSelectedOption] = useState("Home");
+  const navigate = useNavigate();
+
+  function handleClick(option) {
+    setSelectedOption(option);
+    if (option == "File a Case") return navigate("/user/file-case");
+    if (option == "Track Case") return navigate("/user/track-case");
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#ff7e5f] via-[#f9f9f9] to-[#5ee7df] p-10">
@@ -23,21 +31,19 @@ const UserDashboard = () => {
         transition={{ duration: 0.7 }}
         className="absolute top-16 left-5 bg-white bg-opacity-30 backdrop-blur-lg p-4 rounded-xl shadow-lg flex flex-col gap-3"
       >
-        {["Home", "File a Case", "Track Case", "Find a Mediator"].map(
-          (option) => (
-            <button
-              key={option}
-              onClick={() => setSelectedOption(option)}
-              className={`px-6 py-2 text-lg rounded-lg transition-all duration-300 ${
-                selectedOption === option
-                  ? "bg-orange-500 text-white"
-                  : "text-gray-800 hover:bg-orange-200"
-              }`}
-            >
-              {option}
-            </button>
-          )
-        )}
+        {["Home", "File a Case", "Track Case"].map((option) => (
+          <button
+            key={option}
+            onClick={() => handleClick(option)}
+            className={`px-6 py-2 text-lg rounded-lg transition-all duration-300 ${
+              selectedOption === option
+                ? "bg-orange-500 text-white"
+                : "text-gray-800 hover:bg-orange-200"
+            }`}
+          >
+            {option}
+          </button>
+        ))}
       </motion.div>
 
       {/* Content Box with Glassmorphism */}

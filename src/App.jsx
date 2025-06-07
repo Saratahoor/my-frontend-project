@@ -1,14 +1,29 @@
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Community from "./pages/Community";
-import UserDashboard from "./pages/UserDashboard";
-import MediatorDashboard from "./pages/MediatorDashboard";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
+
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Community from "./pages/Community";
+import VoiceTranslator from "./pages/VoiceTranslator";
+
+import AdminDashboard from "./features/Admin/AdminDashboard";
+import CheckBookings from "./features/Admin/CheckBookings";
+import CheckMediators from "./features/Admin/CheckMediators";
+import VerifyUser from "./features/Admin/VerifyUser";
+import VerifyMediator from "./features/Admin/VerifyMediator";
+
+import UserDashboard from "./features/User/UserDashboard";
+import FileCase from "./features/User/FileCase";
+import TrackCase from "./features/User/TrackCase";
+
+import MediatorDashboard from "./features/Mediator/MediatorDashboard";
+import CheckCases from "./features/Mediator/CheckCases";
+
 import LoginForm from "./components/LoginForm";
 import RegistrationForm from "./components/RegisterForm";
+
 import AuthRoutesProtector from "./features/Protectors/AuthRoutesProtector";
 import AdminRoutesProtector from "./features/Protectors/AdminRoutesProtector";
 import UserRoutesProtector from "./features/Protectors/UserRoutesProtector";
@@ -56,6 +71,14 @@ const router = createBrowserRouter([
             path: "dashboard",
             element: <UserDashboard />,
           },
+          {
+            path: "file-case",
+            element: <FileCase />,
+          },
+          {
+            path: "track-case",
+            element: <TrackCase />,
+          },
         ],
       },
       {
@@ -66,6 +89,10 @@ const router = createBrowserRouter([
             path: "dashboard",
             element: <MediatorDashboard />,
           },
+          {
+            path: "cases",
+            element: <CheckCases />,
+          },
         ],
       },
       {
@@ -74,9 +101,17 @@ const router = createBrowserRouter([
         children: [
           {
             path: "dashboard",
-            element: <h1>ADMIN DASHBOARD</h1>,
+            element: <AdminDashboard />,
           },
+          { path: "bookings", element: <CheckBookings /> },
+          { path: "mediators", element: <CheckMediators /> },
+          { path: "verify-user", element: <VerifyUser /> },
+          { path: "verify-mediator", element: <VerifyMediator /> },
         ],
+      },
+      {
+        path: "/voice-translator",
+        element: <VoiceTranslator />,
       },
       {
         path: "/community",

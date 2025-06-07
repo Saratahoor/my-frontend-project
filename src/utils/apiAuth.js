@@ -21,3 +21,17 @@ export async function fetchUser() {
   const data = await res.json();
   return data;
 }
+
+export async function apiLogout() {
+  const res = await fetch("http://localhost:3000/api/auth/logout", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Credentials": "true",
+    },
+    credentials: "include",
+  });
+
+  const data = await res.json();
+  return data;
+}
