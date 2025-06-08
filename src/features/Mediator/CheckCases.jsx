@@ -11,7 +11,8 @@ import {
 } from "../../utils/apiMediator";
 import useLoginData from "../Auth/useLoginData";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useMeetingScheduler } from "../../hooks/useMeetingScheduler";
 
 const statusColors = {
   Filed: "bg-yellow-100 text-yellow-800",
@@ -39,6 +40,8 @@ const CheckCases = () => {
   const { data, isLoading } = useGetMyCases(UserData.linked_id);
   const queryClient = useQueryClient();
   const myCases = data?.data;
+
+  useMeetingScheduler(myCases);
 
   const acceptCaseMutation = useMutation({
     mutationFn: ({ mediatorId, caseId }) =>

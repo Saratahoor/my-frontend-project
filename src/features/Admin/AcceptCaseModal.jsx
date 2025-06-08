@@ -3,7 +3,14 @@ import useLoginData from "../Auth/useLoginData";
 import useAcceptCase from "../Bookings/useAcceptCase";
 
 const AcceptCaseModal = ({ bookingId, onClose }) => {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: {
+      party_ids: "",
+      mediator_id: "",
+      mediation_mode: "",
+      rate: "", // Add default value for rate
+    },
+  });
   const { data: UserData, isLoading } = useLoginData();
   const { acceptCase, isLoading: accepting } = useAcceptCase();
 
@@ -13,6 +20,7 @@ const AcceptCaseModal = ({ bookingId, onClose }) => {
       admin_id: UserData.linked_id,
       ...data,
       party_ids: data.party_ids.split(",").map((id) => id.trim()),
+      rate: parseFloat(data.rate), // Convert rate to number
     };
     acceptCase(submission);
     reset();
@@ -33,7 +41,7 @@ const AcceptCaseModal = ({ bookingId, onClose }) => {
             </label>
             <input
               type="text"
-              {...register("party_ids", { required: true })}
+              {...register("party_ids", { required: "Party IDs are required" })}
               placeholder="USER1001, USER1002"
               className="w-full border p-2 rounded"
             />
@@ -45,8 +53,31 @@ const AcceptCaseModal = ({ bookingId, onClose }) => {
             </label>
             <input
               type="text"
-              {...register("mediator_id", { required: true })}
+              {...register("mediator_id", {
+                required: "Mediator ID is required",
+              })}
               placeholder="MED1001"
+              className="w-full border p-2 rounded"
+            />
+          </div>
+
+          {/* Add new Rate field */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Rate (₹)
+            </label>
+            <input
+              type="number"
+              {...register("rate", {
+                required: "Rate is required",
+                min: {
+                  value: 0,
+                  message: "Rate must be positive",
+                },
+                validate: (value) =>
+                  !isNaN(value) || "Please enter a valid number",
+              })}
+              placeholder="Enter rate amount"
               className="w-full border p-2 rounded"
             />
           </div>
@@ -56,7 +87,9 @@ const AcceptCaseModal = ({ bookingId, onClose }) => {
               Mediation Mode
             </label>
             <select
-              {...register("mediation_mode", { required: true })}
+              {...register("mediation_mode", {
+                required: "Mediation mode is required",
+              })}
               className="w-full border p-2 rounded"
             >
               <option value="">-- Select Mode --</option>

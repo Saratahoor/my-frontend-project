@@ -2,13 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import { apiTrackMyCase } from "../../utils/apiUser";
 import { useState } from "react";
 import useLoginData from "../Auth/useLoginData";
-import { set } from "react-hook-form";
+import { useMeetingScheduler } from "../../hooks/useMeetingScheduler";
 
 function TrackCase() {
   const [searchId, setSearchId] = useState("");
   const [caseResult, setCaseResult] = useState(null);
 
   const { data: UserData, isLoading: isDataLoading } = useLoginData();
+
+  useMeetingScheduler(caseResult);
 
   const {
     data: caseData,
