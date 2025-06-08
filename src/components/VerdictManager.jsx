@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { ethers } from "ethers";
 import axios from "axios";
-import ABI from "../store/abiKey.json";
+// import ABI from "../store/abiKey.json";
 import toast from "react-hot-toast";
+import Content from "../components/ui/Content";
 import { apiCloseCase } from "../utils/apiMediator";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useLoginData from "../features/Auth/useLoginData";
@@ -183,7 +184,9 @@ export default function VerdictManager({ caseId, verdictDetails, onClose }) {
       {!result ? (
         // Show this section only when verdict is not yet stored
         <>
-          <h2 className="text-xl font-semibold mb-4">📝 Store Final Verdict</h2>
+          <h2 className="text-xl font-semibold mb-4">
+            📝 <Content>Store Final Verdict</Content>
+          </h2>
 
           <div className="mb-4">
             <input
@@ -203,7 +206,11 @@ export default function VerdictManager({ caseId, verdictDetails, onClose }) {
             disabled={loading}
             className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
           >
-            {loading ? "Storing Verdict..." : "Store Final Verdict"}
+            {loading ? (
+              <Content>Storing Verdict...</Content>
+            ) : (
+              <Content>Store Final Verdict</Content>
+            )}
           </button>
         </>
       ) : (
