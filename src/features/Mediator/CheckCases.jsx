@@ -11,9 +11,10 @@ import {
 } from "../../utils/apiMediator";
 import useLoginData from "../Auth/useLoginData";
 import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useMeetingScheduler } from "../../hooks/useMeetingScheduler";
 import Content from "../../components/ui/Content";
+import VerdictForm from "../../components/VerdictFrom";
 
 const statusColors = {
   Filed: "bg-yellow-100 text-yellow-800",
@@ -37,6 +38,7 @@ const CheckCases = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [showVenueModal, setShowVenueModal] = useState(false);
   const [meetingAddress, setMeetingAddress] = useState("");
+  const [showVerdictForm, setShowVerdictForm] = useState(false);
   const { data: UserData, isLoading: isDataLoading } = useLoginData();
   const { data, isLoading } = useGetMyCases(UserData.linked_id);
   const queryClient = useQueryClient();
@@ -138,7 +140,8 @@ const CheckCases = () => {
   };
 
   const handlePrepareVerdict = (caseDetails) => {
-    console.log("Preparing verdict for case:", caseDetails);
+    setSelectedCase(caseDetails);
+    setShowVerdictForm(true);
   };
 
   const createMeetingMutation = useMutation({
@@ -492,6 +495,16 @@ const CheckCases = () => {
             </form>
           </div>
         </div>
+      )}
+
+      {showVerdictForm && selectedCase && (
+        <VerdictForm
+          caseDetails={selectedCase}
+          onClose={() => {
+            setShowVerdictForm(false);
+            setSelectedCase(null);
+          }}
+        />
       )}
     </div>
   );

@@ -99,3 +99,16 @@ export async function apiScheduleVenue({
   if (data.error) throw new Error(data.error);
   return data;
 }
+
+export async function apiCloseCase({ mediatorId, caseId }) {
+  const res = await fetch(
+    `http://localhost:3000/api/mediators/closeCase/${mediatorId}/${caseId}`,
+    {
+      method: "POST",
+      credentials: "include",
+    }
+  );
+  const data = await res.json();
+  if (data.error) throw new Error(data.message);
+  return data;
+}
