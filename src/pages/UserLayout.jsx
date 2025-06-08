@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { NavLink, Outlet } from "react-router-dom";
 import LogOut from "../components/ui/LogOut";
+import Content from "../components/ui/Content";
 
 export default function UserLayout() {
   const navItems = [
@@ -20,7 +21,9 @@ export default function UserLayout() {
         className="fixed w-64 h-screen p-6 bg-white bg-opacity-30 backdrop-blur-md shadow-xl flex flex-col justify-between"
       >
         <div className="flex flex-col gap-4">
-          <h1 className="text-3xl font-bold mb-6">Nyaya Path</h1>
+          <h1 className="text-3xl font-bold mb-6">
+            <Content>Nyaya Path</Content>
+          </h1>
           {navItems.map((item) => (
             <NavLink
               key={item.label}
@@ -33,7 +36,7 @@ export default function UserLayout() {
                 }`
               }
             >
-              {item.label}
+              <Content>{item.label}</Content>
             </NavLink>
           ))}
         </div>

@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { NavLink, Outlet } from "react-router-dom";
 import LogOut from "../components/ui/LogOut";
+import Content from "../components/ui/Content";
 
 const AdminLayout = () => {
   const navItems = [
@@ -24,7 +25,9 @@ const AdminLayout = () => {
       >
         {/* Top - Navigation */}
         <div className="flex flex-col gap-4">
-          <h1 className="text-3xl font-bold text-blue-800 mb-6">Admin Panel</h1>
+          <h1 className="text-3xl font-bold text-blue-800 mb-6">
+            <Content>Admin Panel</Content>
+          </h1>
           {navItems.map((item) => (
             <NavLink
               key={item.label}
@@ -37,7 +40,7 @@ const AdminLayout = () => {
                 }`
               }
             >
-              {item.label}
+              <Content>{item.label}</Content>
             </NavLink>
           ))}
         </div>

@@ -10,6 +10,8 @@ import { getUnverifiedMediators } from "./VerifyMediator";
 import { getUnverifiedUsers } from "./VerifyUser";
 import { getMediators } from "./CheckMediators";
 import { useEffect } from "react";
+import PageLoader from "../../components/PageLoader";
+import Content from "../../components/ui/Content";
 
 function StatCard({ title, value, icon: Icon, color }) {
   return (
@@ -18,7 +20,9 @@ function StatCard({ title, value, icon: Icon, color }) {
         <Icon className="w-6 h-6 text-white" />
       </div>
       <div>
-        <h3 className="text-lg font-semibold text-gray-700">{title}</h3>
+        <h3 className="text-lg font-semibold text-gray-700">
+          <Content>{title}</Content>
+        </h3>
         <p className="text-2xl font-bold text-gray-900">{value || 0}</p>
       </div>
     </div>
@@ -28,22 +32,22 @@ function StatCard({ title, value, icon: Icon, color }) {
 function AdminDashboard() {
   const {
     data: bookingsData,
-    isLoading: bookingsLoading,
     refetch: refetchBookings,
+    isFetching: bookingsLoading,
   } = useBookingsData();
   const {
     data: mediators,
-    isLoading: mediatorsLoading,
+    isFetching: mediatorsLoading,
     refetch: refetchMediators,
   } = getMediators();
   const {
     data: unverifiedMediators,
-    isLoading: unverifiedMediatorsLoading,
+    isFetching: unverifiedMediatorsLoading,
     refetch: refetchUnverifiedMediators,
   } = getUnverifiedMediators();
   const {
     data: unverifiedUsers,
-    isLoading: unverifiedUsersLoading,
+    isFetching: unverifiedUsersLoading,
     refetch: refetchUnverifiedUsers,
   } = getUnverifiedUsers();
   const bookings = bookingsData?.data || [];
@@ -69,13 +73,8 @@ function AdminDashboard() {
     mediatorsLoading ||
     unverifiedMediatorsLoading ||
     unverifiedUsersLoading
-  ) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
+  )
+    return <PageLoader />;
 
   const pendingBookings =
     bookings?.filter((b) => b.status === "In Progress").length || 0;
@@ -130,7 +129,7 @@ function AdminDashboard() {
     <div className="p-8">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">
-          Admin Dashboard
+          <Content>Admin Dashboard</Content>
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {cards.map((card) => (

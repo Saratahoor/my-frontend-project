@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { NavLink, Outlet } from "react-router-dom";
 import LogOut from "../components/ui/LogOut";
+import Content from "../components/ui/Content";
 
 const MediatorLayout = () => {
   const navItems = [
@@ -19,7 +20,9 @@ const MediatorLayout = () => {
       >
         {/* Top - Navigation */}
         <div className="flex flex-col gap-4">
-          <h1 className="text-3xl font-bold mb-6">Nyaya Path</h1>
+          <h1 className="text-3xl font-bold mb-6">
+            <Content>Nyaya Path</Content>
+          </h1>
           {navItems.map((item) => (
             <NavLink
               key={item.label}
@@ -32,7 +35,7 @@ const MediatorLayout = () => {
                 }`
               }
             >
-              {item.label}
+              <Content>{item.label}</Content>
             </NavLink>
           ))}
         </div>

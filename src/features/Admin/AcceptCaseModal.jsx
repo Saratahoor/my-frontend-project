@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import useLoginData from "../Auth/useLoginData";
 import useAcceptCase from "../Bookings/useAcceptCase";
+import Content from "../../components/ui/Content";
 
 const AcceptCaseModal = ({ bookingId, onClose }) => {
   const { register, handleSubmit, reset } = useForm({
@@ -32,16 +33,20 @@ const AcceptCaseModal = ({ bookingId, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
       <div className="bg-white w-full max-w-md p-6 rounded-xl shadow-xl relative">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">Accept Case</h2>
+        <h2 className="text-xl font-bold text-gray-800 mb-4">
+          <Content>Accept Case</Content>
+        </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Party IDs (comma separated)
+              <Content>Party IDs</Content> (<Content>comma separated</Content>)
             </label>
             <input
               type="text"
-              {...register("party_ids", { required: "Party IDs are required" })}
+              {...register("party_ids", {
+                required: <Content>Party IDs are required</Content>,
+              })}
               placeholder="USER1001, USER1002"
               className="w-full border p-2 rounded"
             />
@@ -49,7 +54,7 @@ const AcceptCaseModal = ({ bookingId, onClose }) => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Mediator ID
+              <Content>Mediator ID</Content>
             </label>
             <input
               type="text"
@@ -64,7 +69,7 @@ const AcceptCaseModal = ({ bookingId, onClose }) => {
           {/* Add new Rate field */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Rate (₹)
+              <Content>Rate</Content> (₹)
             </label>
             <input
               type="number"
@@ -77,14 +82,14 @@ const AcceptCaseModal = ({ bookingId, onClose }) => {
                 validate: (value) =>
                   !isNaN(value) || "Please enter a valid number",
               })}
-              placeholder="Enter rate amount"
+              placeholder="Eg: 5000"
               className="w-full border p-2 rounded"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Mediation Mode
+              <Content>Mediation Mode</Content>
             </label>
             <select
               {...register("mediation_mode", {
@@ -92,10 +97,15 @@ const AcceptCaseModal = ({ bookingId, onClose }) => {
               })}
               className="w-full border p-2 rounded"
             >
-              <option value="">-- Select Mode --</option>
-              <option value="Online">Online</option>
-              <option value="Offline">Offline</option>
-              <option value="Hybrid">Hybrid</option>
+              <option value="">
+                -- <Content>Select Mode</Content> --
+              </option>
+              <option value="Online">
+                <Content>Online</Content>
+              </option>
+              <option value="Offline">
+                <Content>Offline</Content>
+              </option>
             </select>
           </div>
 
@@ -105,13 +115,13 @@ const AcceptCaseModal = ({ bookingId, onClose }) => {
               onClick={onClose}
               className="px-4 py-2 text-gray-700 border border-gray-300 rounded hover:bg-gray-100"
             >
-              Cancel
+              <Content>Cancel</Content>
             </button>
             <button
               type="submit"
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
-              Submit
+              <Content>Submit</Content>
             </button>
           </div>
         </form>

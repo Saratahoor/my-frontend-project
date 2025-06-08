@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { apiGetMediators } from "../../utils/apiAdmin";
+import PageLoader from "../../components/PageLoader";
+import Content from "../../components/ui/Content";
 
 const mediators2 = [
   {
@@ -48,17 +50,17 @@ const mediators2 = [
 ];
 
 export function getMediators() {
-  const { data, isLoading, isError, refetch } = useQuery({
+  const { data, isLoading, isError, refetch, isFetching } = useQuery({
     queryKey: ["mediators"],
     queryFn: apiGetMediators,
   });
-  return { data, isLoading, isError, refetch };
+  return { data, isLoading, isError, refetch, isFetching };
 }
 
 function CheckMediators() {
-  const { data: mediators, isLoading } = getMediators();
+  const { data: mediators, isFetching } = getMediators();
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isFetching) return <PageLoader />;
 
   return (
     <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -80,38 +82,71 @@ function CheckMediators() {
               className="w-28 h-28 rounded-full object-cover border-4 border-white shadow-md"
             /> */}
             <h2 className="text-xl font-bold text-gray-900 mt-3">
-              {mediator.full_name}
+              <Content>{mediator.full_name}</Content>
             </h2>
             <p className="text-sm text-gray-500">
-              {mediator.gender}, Age{" "}
+              <Content>{mediator.gender}</Content>, <Content>Age</Content>{" "}
               {new Date().getFullYear() - new Date(mediator.DOB).getFullYear()}
             </p>
           </div>
 
           <div className="text-sm text-gray-700 space-y-1 w-full">
             <p>
-              📍 {mediator.address.city}, {mediator.address.state}
+              📍 <Content>{mediator.address.city}</Content>,{" "}
+              <Content>{mediator.address.state}</Content>
             </p>
             <p>📞 {mediator.number}</p>
             <p>📧 {mediator.email}</p>
-            <p>🗣️ Languages: {mediator.languages_spoken.join(", ")}</p>
-            <p>⚖️ Specializations: {mediator.specializations.join(", ")}</p>
-            <p>🎓 {mediator.education_qualification.join(", ")}</p>
-            <p>💼 {mediator.years_of_experience} yrs experience</p>
-            <p>💰 ₹{mediator.price} per case</p>
             <p>
-              🧭 Mode: {mediator.mode} | Level: {mediator.level}
+              🗣️ <Content>Languages</Content>:{" "}
+              {mediator.languages_spoken.map((tag, index) => (
+                <span key={index}>
+                  <Content>{tag}</Content>
+                  {index < mediator.languages_spoken.length - 1 ? ", " : ""}
+                </span>
+              ))}
             </p>
             <p>
-              📌 Status:{" "}
+              ⚖️ <Content>Specializations</Content>:{" "}
+              {mediator.specializations.map((tag, index) => (
+                <span key={index}>
+                  <Content>{tag}</Content>
+                  {index < mediator.specializations.length - 1 ? ", " : ""}
+                </span>
+              ))}
+            </p>
+            <p>
+              🎓{" "}
+              {mediator.education_qualification.map((tag, index) => (
+                <span key={index}>
+                  <Content>{tag}</Content>
+                  {index < mediator.education_qualification.length - 1
+                    ? ", "
+                    : ""}
+                </span>
+              ))}
+            </p>
+            <p>
+              💼 {mediator.years_of_experience}{" "}
+              <Content>yrs experience</Content>
+            </p>
+            <p>
+              💰 ₹{mediator.price} <Content>per case</Content>
+            </p>
+            <p>
+              🧭 <Content>Mode</Content>: <Content>{mediator.mode}</Content> |
+              <Content>Level</Content>: {mediator.level}
+            </p>
+            <p>
+              📌 <Content>Status</Content>:{" "}
               <span className="text-blue-600 font-medium">
-                {mediator.status}
+                <Content>{mediator.status}</Content>
               </span>
             </p>
             <p>
               ✔{" "}
               <span className="text-green-600">
-                {mediator.verification_status}
+                <Content>{mediator.verification_status}</Content>
               </span>
             </p>
           </div>

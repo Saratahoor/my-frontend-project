@@ -9,6 +9,7 @@ import {
 import useLoginData from "../Auth/useLoginData";
 import { useGetMyCases } from "./CheckCases";
 import { useEffect } from "react";
+import Content from "../../components/ui/Content";
 
 function StatCard({ title, value, icon: Icon, color }) {
   return (
@@ -17,7 +18,9 @@ function StatCard({ title, value, icon: Icon, color }) {
         <Icon className="w-6 h-6 text-white" />
       </div>
       <div>
-        <h3 className="text-lg font-semibold text-gray-700">{title}</h3>
+        <h3 className="text-lg font-semibold text-gray-700">
+          <Content>{title}</Content>
+        </h3>
         <p className="text-2xl font-bold text-gray-900">{value || 0}</p>
       </div>
     </div>
@@ -95,11 +98,13 @@ const MediatorDashboard = () => {
       <div className="max-w-7xl mx-auto">
         <div className="bg-white bg-opacity-30 backdrop-blur-lg p-10 rounded-3xl shadow-2xl text-center mb-8">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Mediator Dashboard
+            <Content>Mediator Dashboard</Content>
           </h2>
           <p className="text-lg text-gray-700">
-            Welcome! You can check your assigned cases and manage hearings from
-            here.
+            <Content>
+              Welcome! You can check your assigned cases and manage hearings
+              from here.
+            </Content>
           </p>
         </div>
 

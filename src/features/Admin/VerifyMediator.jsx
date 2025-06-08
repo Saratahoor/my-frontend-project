@@ -4,6 +4,8 @@ import {
   apiVerifyMediator,
 } from "../../utils/apiAdmin";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import PageLoader from "../../components/PageLoader";
+import Content from "../../components/ui/Content";
 
 // Util: Generate profile picture
 // const getProfilePic = (gender, email) => {
@@ -17,11 +19,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Fetch unverified mediators
 export function getUnverifiedMediators() {
-  const { data, isLoading, isError, refetch } = useQuery({
+  const { data, isLoading, isError, refetch, isFetching } = useQuery({
     queryKey: ["unverified-mediators"],
     queryFn: apiGetUnverifiedMediators,
   });
-  return { data, isLoading, isError, refetch };
+  return { data, isLoading, isError, refetch, isFetching };
 }
 
 // Hook to verify mediator
@@ -51,8 +53,7 @@ function VerifyMediator() {
     verifyMediator(data);
   };
 
-  if (isLoading || verifying)
-    return <h1 className="text-center mt-8">Loading...</h1>;
+  if (isLoading || verifying) return <PageLoader />;
   if (isError || !mediators.length)
     return <h1 className="text-center mt-8">No unverified mediators found.</h1>;
 
@@ -70,33 +71,62 @@ function VerifyMediator() {
               className="w-20 h-20 rounded-full object-cover shadow-sm mb-2"
             /> */}
             <h2 className="text-lg font-semibold text-gray-800">
-              {mediator.full_name}
+              <Content>{mediator.full_name}</Content>
             </h2>
             <p className="text-sm text-gray-600">
-              {mediator.gender}, Age{" "}
+              <Content>{mediator.gender}</Content>, <Content>Age</Content>{" "}
               {new Date().getFullYear() - new Date(mediator.DOB).getFullYear()}
             </p>
           </div>
 
           <div className="text-sm text-gray-700 space-y-1">
             <p>
-              📍 {mediator.address.city}, {mediator.address.state}
+              📍 <Content>{mediator.address.city}</Content>,{" "}
+              <Content>{mediator.address.state}</Content>
             </p>
             <p>📧 {mediator.email}</p>
             <p>📞 {mediator.number}</p>
-            <p>🗣️ {mediator.languages_spoken.join(", ")}</p>
-            <p>⚖️ {mediator.specializations.join(", ")}</p>
-            <p>🎓 {mediator.education_qualification.join(", ")}</p>
             <p>
-              💼 {mediator.years_of_experience} yrs | ₹{mediator.price}
+              🗣️{" "}
+              {mediator.languages_spoken.map((tag, index) => (
+                <span key={index}>
+                  <Content>{tag}</Content>
+                  {index < mediator.languages_spoken.length - 1 ? ", " : ""}
+                </span>
+              ))}
             </p>
             <p>
-              🎯 {mediator.level} | {mediator.mode}
+              ⚖️{" "}
+              {mediator.specializations.map((tag, index) => (
+                <span key={index}>
+                  <Content>{tag}</Content>
+                  {index < mediator.specializations.length - 1 ? ", " : ""}
+                </span>
+              ))}
+            </p>
+            <p>
+              🎓{" "}
+              {mediator.education_qualification.map((tag, index) => (
+                <span key={index}>
+                  <Content>{tag}</Content>
+                  {index < mediator.education_qualification.length - 1
+                    ? ", "
+                    : ""}
+                </span>
+              ))}
+            </p>
+            <p>
+              💼 {mediator.years_of_experience} <Content>yrs</Content> | ₹
+              {mediator.price}
+            </p>
+            <p>
+              🎯 <Content>{mediator.level}</Content>
+              <Content>{mediator.mode}</Content>
             </p>
             <p>
               ✔️{" "}
               <span className="text-yellow-600">
-                {mediator.verification_status}
+                <Content>{mediator.verification_status}</Content>
               </span>
             </p>
           </div>
@@ -108,7 +138,7 @@ function VerifyMediator() {
                 handleClick({ status: "Verified", mediator_id: mediator._id })
               }
             >
-              Accept
+              <Content>Accept</Content>
             </button>
             <button
               className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded"
@@ -116,7 +146,7 @@ function VerifyMediator() {
                 handleClick({ status: "Rejected", mediator_id: mediator._id })
               }
             >
-              Reject
+              <Content>Reject</Content>
             </button>
           </div>
         </div>

@@ -1,13 +1,15 @@
 import { apiGetUnverifiedUsers, apiVerifyUser } from "../../utils/apiAdmin";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import PageLoader from "../../components/PageLoader";
+import Content from "../../components/ui/Content";
 
 export function getUnverifiedUsers() {
-  const { data, isLoading, isError, refetch } = useQuery({
+  const { data, isLoading, isError, refetch, isFetching } = useQuery({
     queryKey: ["unverified-user"],
     queryFn: apiGetUnverifiedUsers,
   });
-  return { data, isLoading, isError, refetch };
+  return { data, isLoading, isError, refetch, isFetching };
 }
 
 function useVerifyUser() {
@@ -35,10 +37,13 @@ function VerifyUser() {
     verifyUser(data);
   }
 
-  if (isLoading || verifying)
-    return <h1 className="text-center mt-8">Loading...</h1>;
+  if (isLoading || verifying) return <PageLoader />;
   if (isError || !users.length)
-    return <h1 className="text-center mt-8">No unverified users found.</h1>;
+    return (
+      <h1 className="text-center mt-8">
+        <Content>No unverified users found.</Content>
+      </h1>
+    );
 
   return (
     <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

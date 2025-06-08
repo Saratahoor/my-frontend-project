@@ -13,6 +13,7 @@ import useLoginData from "../Auth/useLoginData";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useMeetingScheduler } from "../../hooks/useMeetingScheduler";
+import Content from "../../components/ui/Content";
 
 const statusColors = {
   Filed: "bg-yellow-100 text-yellow-800",
@@ -186,56 +187,83 @@ const CheckCases = () => {
   if (isLoading || isDataLoading) return <h1>Loading...</h1>;
 
   return (
-    <div className="p-10">
+    <div className="p-10 max-w-[1400px]">
       <div className="bg-white bg-opacity-30 backdrop-blur-lg p-10 rounded-3xl shadow-2xl text-center mb-10">
-        <h2 className="text-4xl font-bold text-gray-900 mb-4">My Cases</h2>
+        <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <Content>My Cases</Content>
+        </h2>
         <p className="text-lg text-gray-700">
-          Here you can view and manage the cases assigned to you.
+          <Content>
+            Here you can view and manage the cases assigned to you.
+          </Content>
         </p>
       </div>
 
       {myCases?.length === 0 ? (
-        <p className="text-center text-gray-600">No cases assigned yet.</p>
+        <p className="text-center text-gray-600">
+          <Content>No cases assigned yet.</Content>
+        </p>
       ) : (
         <div className="space-y-6 max-w-4xl mx-auto">
           {myCases?.map((item) => (
             <div key={item._id} className="bg-white shadow rounded-lg p-6">
               <div className="flex justify-between items-center mb-2">
                 <h3 className="text-xl font-semibold text-gray-800">
-                  {item.case_type}
+                  <Content>{item.case_type}</Content>
                 </h3>
                 <span
                   className={`px-3 py-1 text-sm rounded-full ${
                     statusColors[item.status] || "bg-gray-100 text-gray-800"
                   }`}
                 >
-                  {item.status}
+                  <Content>{item.status}</Content>
                 </span>
               </div>
               <p>
-                <strong>Case ID:</strong> {item._id}
+                <strong>
+                  <Content>Case ID</Content>:
+                </strong>{" "}
+                {item._id}
               </p>
               <p>
-                <strong>Mediation Mode:</strong> {item.mediation_mode}
+                <strong>
+                  <Content>Mediation Mode</Content>:
+                </strong>{" "}
+                <Content>{item.mediation_mode}</Content>
               </p>
               <p>
-                <strong>Language:</strong> {item.language}
+                <strong>
+                  <Content>Language</Content>:
+                </strong>{" "}
+                <Content>{item.language}</Content>
               </p>
               <p>
-                <strong>Priority:</strong> {item.priority}
+                <strong>
+                  <Content>Priority</Content>:
+                </strong>{" "}
+                <Content>{item.priority}</Content>
               </p>
               {item.location && (
                 <p>
-                  <strong>Location:</strong> {item.location}
+                  <strong>
+                    <Content>Location</Content>:
+                  </strong>{" "}
+                  <Content>{item.location}</Content>
                 </p>
               )}
               {item.rate && (
                 <p>
-                  <strong>Rate:</strong> ₹{item.rate}
+                  <strong>
+                    <Content>Rate</Content>:
+                  </strong>{" "}
+                  ₹{item.rate}
                 </p>
               )}
               <p>
-                <strong>Parties:</strong> {item.parties.join(", ")}
+                <strong>
+                  <Content>Parties</Content>:
+                </strong>{" "}
+                {item.parties.join(", ")}
               </p>
               {item.status === "In Progress" && (
                 <div className="mt-3 p-3 bg-gray-50 rounded-lg">
@@ -245,7 +273,9 @@ const CheckCases = () => {
                   </p>
                   {item.meet_link && (
                     <p className="text-sm  text-gray-700">
-                      <strong>Meet Link:</strong>{" "}
+                      <strong>
+                        <Content>Meet Link</Content>:
+                      </strong>{" "}
                       {item.is_meeting_active ? (
                         <a
                           href={item.meet_link}
@@ -253,20 +283,26 @@ const CheckCases = () => {
                           rel="noopener noreferrer"
                           className="text-blue-600 hover:text-blue-800 underline"
                         >
-                          Join Meeting
+                          <Content>Join Meeting</Content>
                         </a>
                       ) : (
                         <span>
-                          Meeting Link will be displayed 5 mins before scheduled
-                          date
+                          <Content>
+                            Meeting Link will be displayed 5 mins before
+                            scheduled date
+                          </Content>
                         </span>
                       )}
                     </p>
                   )}
                   {item.location && (
                     <p className="text-sm  text-gray-700">
-                      <strong>Location: </strong>
-                      <span>{item.location}</span>
+                      <strong>
+                        <Content>Location</Content>:{" "}
+                      </strong>
+                      <span>
+                        <Content>{item.location}</Content>
+                      </span>
                     </p>
                   )}
                 </div>
@@ -279,18 +315,22 @@ const CheckCases = () => {
                       disabled={acceptCaseMutation.isPending}
                       className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:bg-gray-400"
                     >
-                      {acceptCaseMutation.isPending
-                        ? "Accepting..."
-                        : "Accept Case"}
+                      {acceptCaseMutation.isPending ? (
+                        <Content>Accepting...</Content>
+                      ) : (
+                        <Content>Accept Case</Content>
+                      )}
                     </button>
                     <button
                       onClick={() => handleRejectCase(item)}
                       disabled={rejectCaseMutation.isPending}
                       className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 disabled:bg-gray-400"
                     >
-                      {rejectCaseMutation.isPending
-                        ? "Rejecting..."
-                        : "Reject Case"}
+                      {rejectCaseMutation.isPending ? (
+                        <Content>Rejecting...</Content>
+                      ) : (
+                        <Content>Reject Case</Content>
+                      )}
                     </button>
                   </div>
                 )}
@@ -301,7 +341,7 @@ const CheckCases = () => {
                       onClick={() => handleCreateMeeting(item)}
                       className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
                     >
-                      Create Meeting
+                      <Content>Create Meeting</Content>
                     </button>
                   )}
                 {item.status === "Mediator Assigned" &&
@@ -311,9 +351,11 @@ const CheckCases = () => {
                       disabled={scheduleVenueMutation.isPending}
                       className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
                     >
-                      {scheduleVenueMutation.isPending
-                        ? "Scheduling..."
-                        : "Schedule Venue"}
+                      {scheduleVenueMutation.isPending ? (
+                        <Content>Scheduling...</Content>
+                      ) : (
+                        <Content>Schedule Venue</Content>
+                      )}
                     </button>
                   )}
 
@@ -324,15 +366,17 @@ const CheckCases = () => {
                       disabled={scheduleNewDateMutation.isPending}
                       className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
                     >
-                      {scheduleNewDateMutation.isPending
-                        ? "Scheduling..."
-                        : "Schedule New Date"}
+                      {scheduleNewDateMutation.isPending ? (
+                        <Content>Scheduling...</Content>
+                      ) : (
+                        <Content>Schedule New Date</Content>
+                      )}
                     </button>
                     <button
                       onClick={() => handlePrepareVerdict(item)}
                       className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
                     >
-                      Prepare Verdict
+                      <Content>Prepare Verdict</Content>
                     </button>
                   </>
                 )}
@@ -345,11 +389,13 @@ const CheckCases = () => {
       {showVenueModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
-            <h3 className="text-lg font-semibold mb-4">Schedule Venue</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              <Content>Schedule Venue</Content>
+            </h3>
             <form onSubmit={handleVenueSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Meeting Address
+                  <Content>Meeting Address</Content>
                 </label>
                 <textarea
                   value={meetingAddress}
@@ -366,9 +412,11 @@ const CheckCases = () => {
                   disabled={scheduleVenueMutation.isPending}
                   className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
                 >
-                  {scheduleVenueMutation.isPending
-                    ? "Scheduling..."
-                    : "Schedule Venue"}
+                  {scheduleVenueMutation.isPending ? (
+                    <Content>Scheduling...</Content>
+                  ) : (
+                    <Content>Schedule Venue</Content>
+                  )}
                 </button>
                 <button
                   type="button"
@@ -390,11 +438,13 @@ const CheckCases = () => {
       {showDatePicker && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-xl">
-            <h3 className="text-lg font-semibold mb-4">Schedule Meeting</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              <Content>Schedule Meeting</Content>
+            </h3>
             <form onSubmit={handleDateSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Select Date and Time
+                  <Content>Select Date and Time</Content>
                 </label>
                 <DatePicker
                   selected={selectedDate}
@@ -419,11 +469,13 @@ const CheckCases = () => {
                   className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
                 >
                   {createMeetingMutation.isPending ||
-                  scheduleNewDateMutation.isPending
-                    ? "Scheduling..."
-                    : selectedCase?.status === "In Progress"
-                    ? "Reschedule Meeting"
-                    : "Create Meeting"}
+                  scheduleNewDateMutation.isPending ? (
+                    <Content>Scheduling...</Content>
+                  ) : selectedCase?.status === "In Progress" ? (
+                    <Content>Reschedule Meeting</Content>
+                  ) : (
+                    <Content>Create Meeting</Content>
+                  )}
                 </button>
                 <button
                   type="button"
@@ -434,7 +486,7 @@ const CheckCases = () => {
                   }}
                   className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300"
                 >
-                  Cancel
+                  <Content>Cancel</Content>
                 </button>
               </div>
             </form>

@@ -7,6 +7,7 @@ import useDeleteForum from "../features/Community/useDeleteForum";
 import useDeletePost from "../features/Community/useDeletePost";
 import useDeleteComment from "../features/Community/useDeleteComment";
 import AddPostModal from "../features/Community/AddPostModal";
+import Content from "../components/ui/Content";
 
 const Community = () => {
   const { data, isLoading } = useCommunityData();
@@ -83,7 +84,7 @@ const Community = () => {
   return (
     <div className="min-h-screen min-w-full bg-gradient-to-r from-orange-500 via-white to-green-500 py-10 px-4 md:px-12 lg:px-24 xl:px-32">
       <h1 className="text-4xl font-bold text-center text-gray-800 mb-10">
-        🧑‍🤝‍🧑 Community Forums
+        🧑‍🤝‍🧑 <Content>Community Forums</Content>
       </h1>
 
       {/* Add Forum Button */}
@@ -92,7 +93,7 @@ const Community = () => {
           onClick={handleAddForum}
           className="bg-blue-600 text-white px-6 py-2 rounded shadow hover:bg-blue-700"
         >
-          ➕ Add New Forum
+          ➕ <Content>Add New Forum</Content>
         </button>
       </div>
 
@@ -109,19 +110,30 @@ const Community = () => {
               <div className="flex justify-between items-start">
                 <div>
                   <h2 className="text-2xl font-semibold text-indigo-700">
-                    {forum.title}
+                    <Content>{forum.title}</Content>
                   </h2>
-                  <p className="text-gray-700 mt-1">{forum.description}</p>
+                  <p className="text-gray-700 mt-1">
+                    <Content>{forum.description}</Content>
+                  </p>
                   <p className="text-sm text-gray-500 mt-2">
                     <span className="italic mr-6">
-                      🏷️ Tags:{forum.tags.join(", ")}
+                      🏷️ <Content>Tags</Content>: {"  "}
+                      {forum.tags.map((tag, index) => (
+                        <span key={index}>
+                          <Content>{tag}</Content>
+                          {index < forum.tags.length - 1 ? ", " : ""}
+                        </span>
+                      ))}
                     </span>
-                    🎯 Category: {forum.category}
+                    🎯 <Content>Category</Content>:{" "}
+                    <Content>{forum.category}</Content>
                   </p>
                   <p className="text-sm text-gray-500 mt-1">
-                    👤 Created by:{" "}
-                    <span className="font-medium">{forum.created_by}</span> (
-                    {forum.created_by_model})
+                    👤 <Content>Created by</Content>:{" "}
+                    <span className="font-medium">
+                      <Content>{forum.created_by}</Content>
+                    </span>{" "}
+                    (<Content>{forum.created_by_model}</Content>)
                   </p>
                 </div>
                 <div className="text-right">
@@ -133,7 +145,7 @@ const Community = () => {
                       }}
                       className="text-red-600 hover:underline text-sm"
                     >
-                      🗑️ Delete
+                      🗑️ <Content>Delete</Content>
                     </button>
                   )}
                   <div className="text-xl text-gray-500 mt-2">
@@ -151,7 +163,7 @@ const Community = () => {
                     onClick={() => handleAddPost(forum._id)}
                     className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-green-700 text-sm"
                   >
-                    ➕ Add Post
+                    ➕ <Content>Add Post</Content>
                   </button>
                 </div>
 
@@ -162,11 +174,12 @@ const Community = () => {
                       className="bg-gray-200 p-4 rounded-md shadow-md border border-gray-200"
                     >
                       <p className="text-lg font-medium text-gray-800">
-                        {post.content}
+                        <Content>{post.content}</Content>
                       </p>
                       <div className="text-sm text-gray-500 mt-2 flex justify-between">
                         <span>
-                          👤 {post.created_by} ({post.created_by_model})
+                          👤 <Content>{post.created_by}</Content> (
+                          <Content>{post.created_by_model}</Content>)
                         </span>
                         <span>
                           👍 {post.upvotes} / 👎 {post.downvotes}
@@ -178,21 +191,22 @@ const Community = () => {
                           onClick={() => togglePost(post._id)}
                           className="text-blue-600 hover:underline cursor-pointer text-sm font-medium"
                         >
-                          💬 Comments on post ({post.comments.length})
+                          💬 <Content>Comments on post</Content> (
+                          {post.comments.length})
                         </p>
                         <div className="flex gap-4">
                           <button
                             onClick={() => handleAddComment(post._id)}
                             className="text-green-600 hover:underline text-sm"
                           >
-                            ➕ Add Comment
+                            ➕ <Content>Add Comment</Content>
                           </button>
                           {UserData.linked_id === post.created_by && (
                             <button
                               onClick={() => handleDeletePost(post._id)}
                               className="text-red-600 hover:underline text-sm"
                             >
-                              🗑️ Delete Post
+                              🗑️ <Content>Delete Post</Content>
                             </button>
                           )}
                         </div>
@@ -209,11 +223,13 @@ const Community = () => {
                               key={comment._id}
                               className="bg-white p-3 rounded-md text-sm shadow-inner mb-3"
                             >
-                              <p className="text-gray-700">{comment.content}</p>
+                              <p className="text-gray-700">
+                                <Content>{comment.content}</Content>
+                              </p>
                               <div className="text-xs text-gray-500 mt-1 flex justify-between">
                                 <span>
-                                  💬 {comment.created_by} (
-                                  {comment.created_by_model})
+                                  💬 <Content>{comment.created_by}</Content> (
+                                  <Content>{comment.created_by_model})</Content>
                                 </span>
                                 {UserData.linked_id === comment.created_by && (
                                   <button
@@ -222,7 +238,7 @@ const Community = () => {
                                     }
                                     className="text-red-500 hover:underline text-xs"
                                   >
-                                    🗑️ Delete
+                                    🗑️ <Content>Delete</Content>
                                   </button>
                                 )}
                               </div>
@@ -230,7 +246,7 @@ const Community = () => {
                           ))
                         ) : (
                           <p className="text-gray-400 italic">
-                            No comments yet.
+                            <Content>No comments yet.</Content>
                           </p>
                         )}
 
@@ -248,7 +264,7 @@ const Community = () => {
                               onClick={handleSubmitComment}
                               className="mt-2 px-4 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
                             >
-                              Submit Comment
+                              <Content>Submit Comment</Content>
                             </button>
                           </div>
                         )}

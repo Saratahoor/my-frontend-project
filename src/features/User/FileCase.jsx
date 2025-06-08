@@ -3,6 +3,7 @@ import useLoginData from "../Auth/useLoginData";
 import { useForm, useFieldArray } from "react-hook-form";
 import { apiFileCase } from "../../utils/apiUser";
 import toast from "react-hot-toast";
+import Content from "../../components/ui/Content";
 
 function useFileCase() {
   const query = useQueryClient();
@@ -24,6 +25,7 @@ function FileCase() {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -47,7 +49,14 @@ function FileCase() {
       ...data,
       phone_numbers: data.phone_numbers.map((item) => item.number),
     };
-    bookCase({ user_id: UserData.linked_id, ...formattedData });
+    bookCase(
+      { user_id: UserData.linked_id, ...formattedData },
+      {
+        onSettled: () => {
+          reset();
+        },
+      }
+    );
   };
 
   const indianLanguages = [
@@ -79,31 +88,39 @@ function FileCase() {
     <div className="min-h-screen flex items-start justify-center pt-24 px-4">
       <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
         <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-          File a Case
+          <Content>File a Case</Content>
         </h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Mode Dropdown */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Mode
+              <Content>Mode</Content>
             </label>
             <select
               {...register("mode", { required: true })}
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
             >
-              <option value="">Select Mode</option>
-              <option value="Online">Online</option>
-              <option value="Offline">Offline</option>
+              <option value="">
+                <Content>Select Mode</Content>
+              </option>
+              <option value="Online">
+                <Content>Online</Content>
+              </option>
+              <option value="Offline">
+                <Content>Offline</Content>
+              </option>
             </select>
             {errors.mode && (
-              <p className="text-red-500 text-sm mt-1">Mode is required.</p>
+              <p className="text-red-500 text-sm mt-1">
+                <Content>Mode is required.</Content>
+              </p>
             )}
           </div>
 
           {/* Case Type Input */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Case Type
+              <Content>Case Type</Content>
             </label>
             <input
               type="text"
@@ -113,7 +130,7 @@ function FileCase() {
             />
             {errors.case_type && (
               <p className="text-red-500 text-sm mt-1">
-                Case type is required.
+                <Content>Case type is required.</Content>
               </p>
             )}
           </div>
@@ -121,28 +138,32 @@ function FileCase() {
           {/* Language Dropdown */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Language
+              <Content>Language</Content>
             </label>
             <select
               {...register("language", { required: true })}
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
             >
-              <option value="">Select Language</option>
+              <option value="">
+                <Content>Select Language</Content>
+              </option>
               {indianLanguages.map((lang) => (
                 <option key={lang} value={lang}>
-                  {lang}
+                  <Content>{lang}</Content>
                 </option>
               ))}
             </select>
             {errors.language && (
-              <p className="text-red-500 text-sm mt-1">Language is required.</p>
+              <p className="text-red-500 text-sm mt-1">
+                <Content>Language is required.</Content>
+              </p>
             )}
           </div>
 
           {/* Phone Numbers Section */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Party Phone Numbers
+              <Content>Party Phone Numbers</Content>
             </label>
             <div className="space-y-2">
               {fields.map((field, index) => (
@@ -208,7 +229,7 @@ function FileCase() {
                   d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                 />
               </svg>
-              Add Another Phone Number
+              <Content>Add Another Phone Number</Content>
             </button>
           </div>
 

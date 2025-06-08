@@ -86,13 +86,27 @@ function ChatBot() {
         >
           <div className="w-[80%] h-[80%] bg-white rounded-lg shadow-xl border flex flex-col">
             <div className="flex justify-between items-center p-4 border-b">
+              {/* Left side - NyayGPT */}
               <h3 className="font-semibold text-xl">NyayGPT</h3>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-gray-500 hover:text-gray-700 p-2"
-              >
-                <FaTimes size={24} />
-              </button>
+
+              {/* Right side - Microsoft branding and close button */}
+              <div className="flex items-center gap-4">
+                <div className="flex items-center text-sm text-gray-500">
+                  <span className="mr-1">Powered by</span>
+                  <img
+                    src="/microsoft-logo.png"
+                    alt="Microsoft Logo"
+                    className="text-blue-500 text-lg mx-1 h-[30px]"
+                  />
+                  <span className="font-medium text-blue-600">Azure</span>
+                </div>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-gray-500 hover:text-gray-700 p-2"
+                >
+                  <FaTimes size={24} />
+                </button>
+              </div>
             </div>
 
             <div className="flex-1 p-6 overflow-y-auto">

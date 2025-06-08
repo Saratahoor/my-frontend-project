@@ -32,10 +32,23 @@ import UserRoutesProtector from "./features/Protectors/UserRoutesProtector";
 import MediatorRoutesProtector from "./features/Protectors/MediatorRoutesProtector";
 import CreateUser from "./features/Admin/CreateUser";
 
+import { TranslationProvider } from "./hooks/TranslationContext";
+import TopBar from "./components/ui/TopBar";
+
 const MainLayout = () => {
   return (
-    <div className="bg-gradient-to-r from-orange-500 via-white to-green-500 min-h-screen flex items-center justify-center">
-      <Outlet />
+    <div className="bg-gradient-to-r from-orange-500 via-white to-green-500 min-h-screen relative">
+      {/* Language Selector - Fixed position */}
+      <div className="fixed top-4 right-4">
+        <TopBar />
+      </div>
+
+      {/* Main Content */}
+      <div className="flex items-center justify-center min-h-screen">
+        <Outlet />
+      </div>
+
+      {/* Chatbot */}
       <Chatbot />
     </div>
   );
@@ -131,28 +144,30 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
-      <RouterProvider router={router} />
-      <Toaster
-        position="top-center"
-        gutter={12}
-        containerStyle={{ margin: "8px" }}
-        toastOptions={{
-          success: {
-            duration: 1000,
-          },
-          error: {
-            duration: 2000,
-          },
-          style: {
-            fontSize: "16px",
-            maxWidth: "500px",
-            padding: "16px 24px",
-            backgroundColor: "-var(--color-grey-0)",
-            color: "-var(--color-grey-7000)",
-          },
-        }}
-      />
+      <TranslationProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <RouterProvider router={router} />
+        <Toaster
+          position="top-center"
+          gutter={12}
+          containerStyle={{ margin: "8px" }}
+          toastOptions={{
+            success: {
+              duration: 1000,
+            },
+            error: {
+              duration: 2000,
+            },
+            style: {
+              fontSize: "16px",
+              maxWidth: "500px",
+              padding: "16px 24px",
+              backgroundColor: "-var(--color-grey-0)",
+              color: "-var(--color-grey-7000)",
+            },
+          }}
+        />
+      </TranslationProvider>
     </QueryClientProvider>
   );
 }

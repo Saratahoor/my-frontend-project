@@ -4,6 +4,7 @@ import useLoginData from "../Auth/useLoginData";
 import { apiAddCommunityForum } from "../../utils/apiCommunity";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import Content from "../../components/ui/Content";
 
 function useAddForum() {
   const query = useQueryClient();
@@ -52,13 +53,13 @@ const AddForumModal = ({ onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-          Add New Forum
+          <Content>Add New Forum</Content>
         </h2>
 
         <form onSubmit={handleSubmit(handleCreateForum)} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Title
+              <Content>Title</Content>
             </label>
             <input
               {...register("title", { required: true })}
@@ -66,13 +67,15 @@ const AddForumModal = ({ onClose }) => {
               placeholder="Forum Title"
             />
             {errors.title && (
-              <p className="text-red-500 text-sm">Title is required.</p>
+              <p className="text-red-500 text-sm">
+                <Content>Title is required.</Content>
+              </p>
             )}
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Description
+              <Content>Description</Content>
             </label>
             <textarea
               {...register("description", { required: true })}
@@ -80,7 +83,9 @@ const AddForumModal = ({ onClose }) => {
               placeholder="Forum Description"
             />
             {errors.description && (
-              <p className="text-red-500 text-sm">Description is required.</p>
+              <p className="text-red-500 text-sm">
+                <Content>Description is required.</Content>
+              </p>
             )}
           </div>
 
@@ -89,27 +94,39 @@ const AddForumModal = ({ onClose }) => {
               htmlFor="category"
               className="block text-sm font-medium text-gray-700"
             >
-              Category
+              <Content>Category</Content>
             </label>
             <select
               id="category"
               {...register("category", { required: true })}
               className="w-full px-3 py-2 border border-gray-300 rounded"
             >
-              <option value="">Select a category</option>
-              <option value="Legal">Legal</option>
-              <option value="General">General</option>
-              <option value="Dispute">Dispute</option>
-              <option value="Mediation">Mediation</option>
+              <option value="">
+                <Content>Select a category</Content>
+              </option>
+              <option value="Legal">
+                <Content>Legal</Content>
+              </option>
+              <option value="General">
+                <Content>General</Content>
+              </option>
+              <option value="Dispute">
+                <Content>Dispute</Content>
+              </option>
+              <option value="Mediation">
+                <Content>Mediation</Content>
+              </option>
             </select>
             {errors.category && (
-              <p className="text-red-500 text-sm">Category is required.</p>
+              <p className="text-red-500 text-sm">
+                <Content>Category is required.</Content>
+              </p>
             )}
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Tags (comma separated)
+              <Content>Tags</Content> (<Content>comma separated</Content>)
             </label>
             <input
               {...register("tags")}
@@ -124,13 +141,13 @@ const AddForumModal = ({ onClose }) => {
               onClick={onClose}
               className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
             >
-              Cancel
+              <Content>Cancel</Content>
             </button>
             <button
               type="submit"
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
-              Create Forum
+              <Content>Create Forum</Content>
             </button>
           </div>
         </form>

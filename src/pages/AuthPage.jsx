@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import Content from "../components/ui/Content";
 
 const AuthPage = () => {
   const [activeTab, setActiveTab] = useState("login");
@@ -20,7 +21,7 @@ const AuthPage = () => {
             navigate("/auth/login");
           }}
         >
-          Login
+          <Content>Login</Content>
         </button>
         <button
           className={`px-6 py-2 rounded-full font-medium transition ${
@@ -33,7 +34,7 @@ const AuthPage = () => {
             navigate("/auth/register");
           }}
         >
-          Register
+          <Content>Register</Content>
         </button>
       </div>
 

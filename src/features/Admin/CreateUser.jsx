@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { apiCreateUser } from "../../utils/apiAdmin";
+import Content from "../../components/ui/Content";
 
 function CreateUser() {
   const {
@@ -42,13 +43,15 @@ function CreateUser() {
 
   return (
     <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-md p-8">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Create New User</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">
+        <Content>Create New User</Content>
+      </h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Full Name
+              <Content>Full Name</Content>
             </label>
             <input
               {...register("full_name", {
@@ -69,7 +72,7 @@ function CreateUser() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Phone Number
+              <Content>Phone Number</Content>
             </label>
             <input
               {...register("number", {
@@ -90,7 +93,7 @@ function CreateUser() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Email
+              <Content>Email</Content>
             </label>
             <input
               type="email"
@@ -112,7 +115,7 @@ function CreateUser() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Password
+              <Content>Password</Content>
             </label>
             <input
               type="password"
@@ -134,7 +137,7 @@ function CreateUser() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              City
+              <Content>City</Content>
             </label>
             <input
               {...register("address.city", { required: "City is required" })}
@@ -149,7 +152,7 @@ function CreateUser() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              State
+              <Content>State</Content>
             </label>
             <input
               {...register("address.state", {
@@ -166,24 +169,36 @@ function CreateUser() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              User Type
+              <Content>User Type</Content>
             </label>
             <select
               {...register("user_type")}
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-blue-500"
             >
-              <option value="Citizen">Citizen</option>
-              <option value="Police">Police</option>
-              <option value="LegalAid">Legal Aid</option>
-              <option value="NGO">NGO</option>
-              <option value="Court">Court</option>
-              <option value="Other">Other</option>
+              <option value="Citizen">
+                <Content>Citizen</Content>
+              </option>
+              <option value="Police">
+                <Content>Police</Content>
+              </option>
+              <option value="LegalAid">
+                <Content>Legal Aid</Content>
+              </option>
+              <option value="NGO">
+                <Content>NGO</Content>
+              </option>
+              <option value="Court">
+                <Content>Court</Content>
+              </option>
+              <option value="Other">
+                <Content>Other</Content>
+              </option>
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Language Preference
+              <Content>Language Preference</Content>
             </label>
             <input
               {...register("language_preference", {
@@ -205,7 +220,11 @@ function CreateUser() {
             disabled={isSubmitting || createUserMutation.isPending}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400"
           >
-            {createUserMutation.isPending ? "Creating..." : "Create User"}
+            {createUserMutation.isPending ? (
+              <Content>Creating...</Content>
+            ) : (
+              <Content>Create User</Content>
+            )}
           </button>
         </div>
       </form>
@@ -213,7 +232,7 @@ function CreateUser() {
       {createUserMutation.isSuccess && (
         <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-md">
           <h3 className="text-lg font-semibold text-green-800">
-            User Created Successfully
+            <Content>User Created Successfully</Content>
           </h3>
           <div className="mt-2 text-sm text-green-700">
             <p>User ID: {createUserMutation.data._id}</p>
