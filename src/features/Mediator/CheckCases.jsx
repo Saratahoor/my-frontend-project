@@ -20,12 +20,12 @@ const statusColors = {
   Closed: "bg-green-100 text-green-800",
 };
 
-function useGetMyCases(id) {
-  const { data, isLoading, isError } = useQuery({
+export function useGetMyCases(id) {
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["my-cases"],
     queryFn: () => apiFetchMyCases(id),
   });
-  return { data, isLoading, isError };
+  return { data, isLoading, isError, refetch };
 }
 
 const CheckCases = () => {

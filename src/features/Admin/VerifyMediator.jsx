@@ -6,22 +6,22 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Util: Generate profile picture
-const getProfilePic = (gender, email) => {
-  if (gender === "Male") {
-    return "https://randomuser.me/api/portraits/men/32.jpg";
-  } else if (gender === "Female") {
-    return "https://randomuser.me/api/portraits/women/44.jpg";
-  }
-  return `https://i.pravatar.cc/150?u=${email}`;
-};
+// const getProfilePic = (gender, email) => {
+//   if (gender === "Male") {
+//     return "https://randomuser.me/api/portraits/men/32.jpg";
+//   } else if (gender === "Female") {
+//     return "https://randomuser.me/api/portraits/women/44.jpg";
+//   }
+//   return `https://i.pravatar.cc/150?u=${email}`;
+// };
 
 // Fetch unverified mediators
-function getUnverifiedMediators() {
-  const { data, isLoading, isError } = useQuery({
+export function getUnverifiedMediators() {
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["unverified-mediators"],
     queryFn: apiGetUnverifiedMediators,
   });
-  return { data, isLoading, isError };
+  return { data, isLoading, isError, refetch };
 }
 
 // Hook to verify mediator

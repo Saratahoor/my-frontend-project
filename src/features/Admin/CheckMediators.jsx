@@ -47,12 +47,12 @@ const mediators2 = [
   },
 ];
 
-function getMediators() {
-  const { data, isLoading, isError } = useQuery({
+export function getMediators() {
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["mediators"],
     queryFn: apiGetMediators,
   });
-  return { data, isLoading, isError };
+  return { data, isLoading, isError, refetch };
 }
 
 function CheckMediators() {

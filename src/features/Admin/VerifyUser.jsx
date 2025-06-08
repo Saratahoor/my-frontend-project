@@ -2,12 +2,12 @@ import { apiGetUnverifiedUsers, apiVerifyUser } from "../../utils/apiAdmin";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
-function getUnverifiedUsers() {
-  const { data, isLoading, isError } = useQuery({
+export function getUnverifiedUsers() {
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["unverified-user"],
     queryFn: apiGetUnverifiedUsers,
   });
-  return { data, isLoading, isError };
+  return { data, isLoading, isError, refetch };
 }
 
 function useVerifyUser() {
