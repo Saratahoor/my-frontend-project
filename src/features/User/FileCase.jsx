@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useLoginData from "../Auth/useLoginData";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { apiFileCase } from "../../utils/apiUser";
 import toast from "react-hot-toast";
 
@@ -23,14 +23,31 @@ function FileCase() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      mode: "",
+      case_type: "",
+      language: "",
+      phone_numbers: [{ number: "" }],
+    },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "phone_numbers",
+  });
 
   const { data: UserData, isLoading } = useLoginData();
   const { bookCase, isLoading: booking } = useFileCase();
 
   const onSubmit = (data) => {
-    bookCase({ user_id: UserData.linked_id, ...data });
+    const formattedData = {
+      ...data,
+      phone_numbers: data.phone_numbers.map((item) => item.number),
+    };
+    bookCase({ user_id: UserData.linked_id, ...formattedData });
   };
 
   const indianLanguages = [
@@ -120,6 +137,79 @@ function FileCase() {
             {errors.language && (
               <p className="text-red-500 text-sm mt-1">Language is required.</p>
             )}
+          </div>
+
+          {/* Phone Numbers Section */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Party Phone Numbers
+            </label>
+            <div className="space-y-2">
+              {fields.map((field, index) => (
+                <div key={field.id} className="flex gap-2">
+                  <input
+                    type="tel"
+                    {...register(`phone_numbers.${index}.number`, {
+                      required: "Phone number is required",
+                      pattern: {
+                        value: /^\+?[\d\s-]+$/,
+                        message: "Invalid phone number format",
+                      },
+                    })}
+                    placeholder="Enter phone number"
+                    className="flex-1 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
+                  />
+                  {fields.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => remove(index)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              ))}
+              {errors.phone_numbers?.[index]?.number && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.phone_numbers[index].number.message}
+                </p>
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={() => append({ number: "" })}
+              className="mt-2 text-blue-600 hover:text-blue-700 text-sm flex items-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mr-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+              Add Another Phone Number
+            </button>
           </div>
 
           {/* Submit Button */}

@@ -62,3 +62,17 @@ export async function apiGetMediators() {
   const data = await res.json();
   return data;
 }
+
+export async function apiCreateUser(userData) {
+  const res = await fetch("http://localhost:3000/api/auth/registerUser", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(userData),
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error);
+  return data;
+}

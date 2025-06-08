@@ -8,6 +8,7 @@ const AdminLayout = () => {
     { label: "Dashboard", path: "/admin/dashboard" },
     { label: "Check Booking", path: "/admin/bookings" },
     { label: "Check Mediators", path: "/admin/mediators" },
+    { label: "Create User", path: "/admin/create-user" },
     { label: "Verify User", path: "/admin/verify-user" },
     { label: "Verify Mediator", path: "/admin/verify-mediator" },
   ];

@@ -78,3 +78,24 @@ export async function apiScheduleNewDate({
   if (data.error) throw new Error(data.error);
   return data;
 }
+
+export async function apiScheduleVenue({
+  mediatorId,
+  caseId,
+  meeting_address,
+}) {
+  const res = await fetch(
+    `http://localhost:3000/api/mediators/scheduleVenue/${mediatorId}/${caseId}`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ meeting_address }),
+    }
+  );
+  const data = await res.json();
+  if (data.error) throw new Error(data.error);
+  return data;
+}

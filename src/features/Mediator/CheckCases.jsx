@@ -7,6 +7,7 @@ import {
   apiRejectCase,
   apiCreateMeeting,
   apiScheduleNewDate,
+  apiScheduleVenue,
 } from "../../utils/apiMediator";
 import useLoginData from "../Auth/useLoginData";
 import toast from "react-hot-toast";
@@ -32,6 +33,8 @@ const CheckCases = () => {
   const [selectedCase, setSelectedCase] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [showVenueModal, setShowVenueModal] = useState(false);
+  const [meetingAddress, setMeetingAddress] = useState("");
   const { data: UserData, isLoading: isDataLoading } = useLoginData();
   const { data, isLoading } = useGetMyCases(UserData.linked_id);
   const queryClient = useQueryClient();
@@ -76,6 +79,21 @@ const CheckCases = () => {
     },
   });
 
+  const scheduleVenueMutation = useMutation({
+    mutationFn: ({ mediatorId, caseId, meeting_address }) =>
+      apiScheduleVenue({ mediatorId, caseId, meeting_address }),
+    onSuccess: () => {
+      toast.success("Venue scheduled successfully");
+      queryClient.invalidateQueries(["my-cases"]);
+      setShowVenueModal(false);
+      setSelectedCase(null);
+      setMeetingAddress("");
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to schedule venue");
+    },
+  });
+
   const handleAcceptCase = (caseDetails) => {
     acceptCaseMutation.mutate({
       mediatorId: UserData.linked_id,
@@ -93,6 +111,26 @@ const CheckCases = () => {
   const handleScheduleDate = (caseDetails) => {
     setSelectedCase(caseDetails);
     setShowDatePicker(true);
+  };
+
+  const handleScheduleVenue = (caseDetails) => {
+    setSelectedCase(caseDetails);
+    setShowVenueModal(true);
+  };
+
+  // Add handler for form submission
+  const handleVenueSubmit = (e) => {
+    e.preventDefault();
+    if (!meetingAddress.trim()) {
+      toast.error("Please enter meeting address");
+      return;
+    }
+
+    scheduleVenueMutation.mutate({
+      mediatorId: UserData.linked_id,
+      caseId: selectedCase._id,
+      meeting_address: meetingAddress.trim(),
+    });
   };
 
   const handlePrepareVerdict = (caseDetails) => {
@@ -175,6 +213,9 @@ const CheckCases = () => {
                 <strong>Case ID:</strong> {item._id}
               </p>
               <p>
+                <strong>Mediation Mode:</strong> {item.mediation_mode}
+              </p>
+              <p>
                 <strong>Language:</strong> {item.language}
               </p>
               <p>
@@ -185,7 +226,6 @@ const CheckCases = () => {
                   <strong>Location:</strong> {item.location}
                 </p>
               )}
-
               {item.rate && (
                 <p>
                   <strong>Rate:</strong> ₹{item.rate}
@@ -201,16 +241,29 @@ const CheckCases = () => {
                     {new Date(item.schedule_date).toLocaleString()}
                   </p>
                   {item.meet_link && (
-                    <p className="text-sm">
+                    <p className="text-sm  text-gray-700">
                       <strong>Meet Link:</strong>{" "}
-                      <a
-                        href={item.meet_link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800 underline"
-                      >
-                        Join Meeting
-                      </a>
+                      {item.is_meeting_active ? (
+                        <a
+                          href={item.meet_link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 underline"
+                        >
+                          Join Meeting
+                        </a>
+                      ) : (
+                        <span>
+                          Meeting Link will be displayed 5 mins before scheduled
+                          date
+                        </span>
+                      )}
+                    </p>
+                  )}
+                  {item.location && (
+                    <p className="text-sm  text-gray-700">
+                      <strong>Location: </strong>
+                      <span>{item.location}</span>
                     </p>
                   )}
                 </div>
@@ -239,14 +292,27 @@ const CheckCases = () => {
                   </div>
                 )}
 
-                {item.status === "Mediator Assigned" && (
-                  <button
-                    onClick={() => handleCreateMeeting(item)}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                  >
-                    Create Meeting
-                  </button>
-                )}
+                {item.status === "Mediator Assigned" &&
+                  item.mediation_mode === "Online" && (
+                    <button
+                      onClick={() => handleCreateMeeting(item)}
+                      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                    >
+                      Create Meeting
+                    </button>
+                  )}
+                {item.status === "Mediator Assigned" &&
+                  item.mediation_mode === "Offline" && (
+                    <button
+                      onClick={() => handleScheduleVenue(item)}
+                      disabled={scheduleVenueMutation.isPending}
+                      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
+                    >
+                      {scheduleVenueMutation.isPending
+                        ? "Scheduling..."
+                        : "Schedule Venue"}
+                    </button>
+                  )}
 
                 {item.status === "In Progress" && (
                   <>
@@ -270,6 +336,51 @@ const CheckCases = () => {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {showVenueModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
+            <h3 className="text-lg font-semibold mb-4">Schedule Venue</h3>
+            <form onSubmit={handleVenueSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Meeting Address
+                </label>
+                <textarea
+                  value={meetingAddress}
+                  onChange={(e) => setMeetingAddress(e.target.value)}
+                  placeholder="Enter complete meeting address"
+                  rows={4}
+                  className="w-full border rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+              <div className="flex space-x-3">
+                <button
+                  type="submit"
+                  disabled={scheduleVenueMutation.isPending}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
+                >
+                  {scheduleVenueMutation.isPending
+                    ? "Scheduling..."
+                    : "Schedule Venue"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowVenueModal(false);
+                    setSelectedCase(null);
+                    setMeetingAddress("");
+                  }}
+                  className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
 

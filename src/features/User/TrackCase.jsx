@@ -91,11 +91,11 @@ function TrackCase() {
             <p>
               <strong>Priority:</strong> {caseResult.priority}
             </p>
-            {caseResult.schedule && (
+            {caseResult.scheduled_date && (
               <>
                 <p>
                   <strong>Schedule Date:</strong>{" "}
-                  {new Date(caseResult.schedule.schedule_date).toLocaleString()}
+                  {new Date(caseResult.scheduled_date).toLocaleString()}
                 </p>
                 <p>
                   <strong>Booking Mode:</strong>{" "}
@@ -120,13 +120,9 @@ function TrackCase() {
               <strong>Mediator(s):</strong> {caseResult.assigned_mediator}
             </p>
             {caseResult.meet_link && (
-              <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-                <p className="text-sm text-gray-700">
-                  <strong>Next Meeting:</strong>{" "}
-                  {new Date(caseResult.scheduled_date).toLocaleString()}
-                </p>
-                <p className="text-sm">
-                  <strong>Meet Link:</strong>{" "}
+              <p className="text-sm">
+                <strong>Meet Link:</strong>{" "}
+                {caseResult.is_meeting_active ? (
                   <a
                     href={caseResult.meet_link}
                     target="_blank"
@@ -135,8 +131,12 @@ function TrackCase() {
                   >
                     Join Meeting
                   </a>
-                </p>
-              </div>
+                ) : (
+                  <span>
+                    Meeting Link will be displayed 5 mins before scheduled date
+                  </span>
+                )}
+              </p>
             )}
           </div>
         )}

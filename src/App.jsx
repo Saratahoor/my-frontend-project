@@ -30,6 +30,7 @@ import AuthRoutesProtector from "./features/Protectors/AuthRoutesProtector";
 import AdminRoutesProtector from "./features/Protectors/AdminRoutesProtector";
 import UserRoutesProtector from "./features/Protectors/UserRoutesProtector";
 import MediatorRoutesProtector from "./features/Protectors/MediatorRoutesProtector";
+import CreateUser from "./features/Admin/CreateUser";
 
 const MainLayout = () => {
   return (
@@ -108,6 +109,7 @@ const router = createBrowserRouter([
           },
           { path: "bookings", element: <CheckBookings /> },
           { path: "mediators", element: <CheckMediators /> },
+          { path: "create-user", element: <CreateUser /> },
           { path: "verify-user", element: <VerifyUser /> },
           { path: "verify-mediator", element: <VerifyMediator /> },
         ],
@@ -129,7 +131,7 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       <RouterProvider router={router} />
       <Toaster
         position="top-center"
