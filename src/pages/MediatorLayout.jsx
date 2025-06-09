@@ -7,6 +7,7 @@ const MediatorLayout = () => {
   const navItems = [
     { label: "Dashboard", path: "/mediator/dashboard" },
     { label: "Check My Cases", path: "/mediator/cases" },
+    { label: "Samvaad", path: "/voice-translator" },
   ];
 
   return (
@@ -21,7 +22,7 @@ const MediatorLayout = () => {
         {/* Top - Navigation */}
         <div className="flex flex-col gap-4">
           <h1 className="text-3xl font-bold mb-6">
-            <Content>Nyaya Path</Content>
+            <Content>Nyay Path</Content>
           </h1>
           {navItems.map((item) => (
             <NavLink

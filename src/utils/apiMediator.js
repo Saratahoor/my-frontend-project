@@ -100,11 +100,15 @@ export async function apiScheduleVenue({
   return data;
 }
 
-export async function apiCloseCase({ mediatorId, caseId }) {
+export async function apiCloseCase({ mediatorId, caseId, final_verdict }) {
   const res = await fetch(
     `http://localhost:3000/api/mediators/closeCase/${mediatorId}/${caseId}`,
     {
       method: "POST",
+      body: JSON.stringify({ final_verdict }),
+      headers: {
+        "Content-Type": "application/json",
+      },
       credentials: "include",
     }
   );

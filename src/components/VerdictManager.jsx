@@ -18,9 +18,6 @@ const CONTRACT_ABI = [
 ];
 const PINATA_JWT = import.meta.env.VITE_PINATA_JWT_TOKEN;
 
-console.log(CONTRACT_ADDRESS);
-console.log(PINATA_JWT);
-
 export default function VerdictManager({ caseId, verdictDetails, onClose }) {
   const [file, setFile] = useState(null);
   const [result, setResult] = useState("");
@@ -31,10 +28,9 @@ export default function VerdictManager({ caseId, verdictDetails, onClose }) {
 
   // Add close case mutation
   const closeCaseMutation = useMutation({
-    mutationFn: ({ mediatorId, caseId }) =>
-      apiCloseCase({ mediatorId, caseId }),
+    mutationFn: ({ mediatorId, caseId, final_verdict }) =>
+      apiCloseCase({ mediatorId, caseId, final_verdict }),
     onSuccess: () => {
-      toast.success("Case closed successfully");
       queryClient.invalidateQueries(["my-cases"]);
       onClose?.(); // Close the modal if provided
     },
@@ -83,20 +79,20 @@ export default function VerdictManager({ caseId, verdictDetails, onClose }) {
       const formData = new FormData();
 
       // Create verdict metadata
-      const verdictData = {
-        ...verdictDetails,
-        caseId: caseId,
-        timestamp: new Date().toISOString(),
-        metadata: {
-          type: "verdict",
-          version: "1.0",
-        },
-      };
+      // const verdictData = {
+      //   ...verdictDetails,
+      //   caseId: caseId,
+      //   timestamp: new Date().toISOString(),
+      //   metadata: {
+      //     type: "verdict",
+      //     version: "1.0",
+      //   },
+      // };
 
       // Create JSON file for verdict
-      const verdictBlob = new Blob([JSON.stringify(verdictData, null, 2)], {
-        type: "application/json",
-      });
+      // const verdictBlob = new Blob([JSON.stringify(verdictData, null, 2)], {
+      //   type: "application/json",
+      // });
       // formData.append("file", verdictBlob, "verdict.json");
 
       // Append supporting document if provided
@@ -156,6 +152,7 @@ export default function VerdictManager({ caseId, verdictDetails, onClose }) {
       await closeCaseMutation.mutateAsync({
         mediatorId: UserData.linked_id,
         caseId: caseId,
+        final_verdict: { ipfs_hash: storedHash, ...verdictDetails },
       });
 
       toast.success("Verdict stored and case closed successfully!");

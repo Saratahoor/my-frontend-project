@@ -23,6 +23,7 @@ import CheckCases from "./features/Mediator/CheckCases";
 
 import LoginForm from "./components/LoginForm";
 import RegistrationForm from "./components/RegisterForm";
+import TestComponent from "./components/TestComponent";
 
 import Chatbot from "./components/ui/ChatBot";
 
@@ -134,6 +135,10 @@ const router = createBrowserRouter([
       {
         path: "/community",
         element: <Community />,
+      },
+      {
+        path: "/audio-test",
+        element: <TestComponent />,
       },
     ],
   },
