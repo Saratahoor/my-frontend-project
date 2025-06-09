@@ -7,6 +7,7 @@ import {
   FaPlus,
   FaTimes,
   FaCheck,
+  FaRedo,
 } from "react-icons/fa";
 import toast from "react-hot-toast";
 
@@ -43,13 +44,33 @@ function VoiceTranslator() {
     ]);
   };
 
+  const resetTranslator = (id) => {
+    setTranslators((prevTranslators) =>
+      prevTranslators.map((t) => {
+        if (t.id === id) {
+          // Reset to initial state but keep the component
+          return {
+            ...t,
+            sourceLang: "en",
+            targetLang: "kn",
+            sourceText: "",
+            translatedText: "",
+            isConfirmed: false,
+            sourceAudioSrc: "",
+            targetAudioSrc: "",
+          };
+        }
+        return t;
+      })
+    );
+  };
+
   const handleRecord = async (id, isSource) => {
     const translator = translators.find((t) => t.id === id);
     if (!translator) return;
 
     if (!recorder.isRecording) {
       try {
-        console.log("Starting recording...");
         // Clear previous data when starting new recording
         setTranslators((prevTranslators) =>
           prevTranslators.map((t) => {
@@ -72,7 +93,6 @@ function VoiceTranslator() {
       }
     } else {
       try {
-        console.log("Stopping recording...");
         const audioBlob = await recorder.stopRecording();
 
         // Convert base64 back to Blob for recorded audio
@@ -93,7 +113,6 @@ function VoiceTranslator() {
           : translator.sourceLang;
 
         const result = await translateAudio(audioBlob, sourceLang, targetLang);
-        console.log("Translation result:", result);
 
         // Update the text fields and audio sources
         setTranslators((prevTranslators) =>
@@ -146,7 +165,6 @@ function VoiceTranslator() {
           const targetLang = languages.find(
             (l) => l.code === t.targetLang
           )?.name;
-          console.log(`Confirmed Translation: ${sourceLang} to ${targetLang}`);
 
           return { ...t, isConfirmed: true };
         }
@@ -191,7 +209,33 @@ function VoiceTranslator() {
               key={translator.id}
               className="relative backdrop-blur-sm bg-white/30 rounded-2xl shadow-lg border border-white/50 p-4 space-y-4"
             >
-              {/* Close button */}
+              {translator.isConfirmed ? (
+                <div className="absolute top-1 right-1 z-10 flex gap-1">
+                  <button
+                    onClick={() => resetTranslator(translator.id)}
+                    className="p-1 rounded-full bg-white/50 hover:bg-yellow-100 transition-colors"
+                    title="Reset translator"
+                  >
+                    <FaRedo className="text-gray-600 hover:text-yellow-600" />
+                  </button>
+                  <button
+                    onClick={() => removeTranslator(translator.id)}
+                    className="p-1 rounded-full bg-white/50 hover:bg-red-100 transition-colors"
+                    title="Remove translator"
+                  >
+                    <FaTimes className="text-gray-600 hover:text-red-700" />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => handleConfirm(translator.id)}
+                  className="absolute top-1 right-1 z-10 p-1 rounded-full bg-white/50 hover:bg-green-100 transition-colors"
+                  title="Confirm languages"
+                >
+                  <FaCheck className="text-gray-600 hover:text-green-700" />
+                </button>
+              )}
+              {/* Close button
               <button
                 onClick={() =>
                   translator.isConfirmed
@@ -209,7 +253,7 @@ function VoiceTranslator() {
                 ) : (
                   <FaCheck className="text-gray-600 hover:text-green-700" />
                 )}
-              </button>
+              </button> */}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Source text container */}
@@ -238,9 +282,10 @@ function VoiceTranslator() {
                   </select>
                   <div className="bg-white/50 backdrop-blur-sm rounded-lg p-4 min-h-[200px] relative border border-gray-200">
                     <textarea
-                      className="w-full h-full bg-transparent text-gray-700 resize-none outline-none"
+                      className="w-full min-h-[200px] h-full bg-transparent text-gray-700 resize-none outline-none"
                       placeholder="Enter text"
                       value={translator.sourceText}
+                      readOnly
                     />
                     <div className="absolute bottom-4 right-4 flex gap-2">
                       <button
@@ -302,7 +347,7 @@ function VoiceTranslator() {
                   </select>
                   <div className="bg-white/50 backdrop-blur-sm rounded-lg p-4 min-h-[200px] relative border border-gray-200">
                     <textarea
-                      className="w-full h-full bg-transparent text-gray-700 resize-none outline-none"
+                      className="w-full min-h-[200px] h-full bg-transparent text-gray-700 resize-none outline-none"
                       placeholder="Translation"
                       value={translator.translatedText}
                       readOnly

@@ -310,6 +310,16 @@ const CheckCases = () => {
                   )}
                 </div>
               )}
+              {item.status === "Closed" && (
+                <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-700">
+                    <strong>IPFS Hash:</strong> {item.final_verdict.ipfs_hash}
+                  </p>
+                  <p className="text-sm text-gray-700">
+                    <strong>Summary:</strong> {item.final_verdict.summary}
+                  </p>
+                </div>
+              )}
               <div className="mt-4 space-x-3">
                 {item.status === "Filed" && (
                   <div className="flex space-x-3">

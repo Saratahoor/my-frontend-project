@@ -184,10 +184,6 @@ export function useAudioRecorder() {
           // Convert to WAV
           const wavBlob = await convertToWav(audioBlob);
 
-          // Optional: Test WAV playback
-          console.log("Original WebM size:", audioBlob.size);
-          console.log("Converted WAV size:", wavBlob.size);
-
           // Create base64 from WAV
           const fileReader = new FileReader();
           fileReader.onloadend = () => {

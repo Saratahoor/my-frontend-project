@@ -22,7 +22,6 @@ import MediatorDashboard from "./features/Mediator/MediatorDashboard";
 import CheckCases from "./features/Mediator/CheckCases";
 
 import LoginForm from "./components/LoginForm";
-import RegistrationForm from "./components/RegisterForm";
 import TestComponent from "./components/TestComponent";
 
 import Chatbot from "./components/ui/ChatBot";
@@ -35,6 +34,9 @@ import CreateUser from "./features/Admin/CreateUser";
 
 import { TranslationProvider } from "./hooks/TranslationContext";
 import TopBar from "./components/ui/TopBar";
+import RegistrationSelector from "./features/Auth/RegistrationSelector";
+import RegisterUser from "./pages/RegisterUser";
+import RegisterMediator from "./pages/RegisterMediator";
 
 const MainLayout = () => {
   return (
@@ -77,7 +79,14 @@ const router = createBrowserRouter([
           },
           {
             path: "register",
-            element: <RegistrationForm />,
+            element: <RegistrationSelector />,
+            children: [
+              { path: "user", element: <RegisterUser /> },
+              {
+                path: "mediator",
+                element: <RegisterMediator />,
+              },
+            ],
           },
         ],
       },
@@ -150,7 +159,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TranslationProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         <RouterProvider router={router} />
         <Toaster
           position="top-center"

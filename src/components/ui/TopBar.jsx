@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "../../hooks/TranslationContext";
 import { IoLanguage } from "react-icons/io5";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { useLocation } from "react-router-dom";
 
 const languages = [
   { code: "en", name: "English" },
@@ -24,6 +25,7 @@ function LanguageSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const { currentLanguage, setCurrentLanguage } = useTranslation();
+  const location = useLocation();
 
   const currentLang = languages.find((lang) => lang.code === currentLanguage);
 
@@ -47,9 +49,12 @@ function LanguageSelector() {
         <div className="flex flex-row items-center justify-center">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="flex w-[150px] items-center justify-between bg-white/80 backdrop-blur-sm text-gray-700 font-medium 
+            disabled={location.pathname === "/voice-translator"}
+            className={`flex w-[150px] items-center justify-between bg-white/80 backdrop-blur-sm text-gray-700 font-medium 
            py-2 px-4 rounded-lg border-2 border-orange-400 hover:border-green-400 
-           transition-all duration-300 outline-none shadow-md hover:shadow-lg h-[40px]"
+           transition-all duration-300 outline-none shadow-md hover:shadow-lg h-[40px] ${
+             location.pathname === "/voice-translator" && "cursor-not-allowed"
+           }`}
           >
             <span className="flex-1 text-center">{currentLang?.name}</span>
             <MdKeyboardArrowDown

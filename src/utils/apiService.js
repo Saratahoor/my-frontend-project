@@ -83,7 +83,6 @@ export async function translateAudio(audioInput, sourceLang, targetLang) {
     );
 
     const result = await response.json();
-    console.log(result);
 
     if (
       !result ||

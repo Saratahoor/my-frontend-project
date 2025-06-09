@@ -143,10 +143,6 @@ export default function VerdictManager({ caseId, verdictDetails, onClose }) {
 
       // Verify the stored verdict
       const [storedHash, timestamp] = await contract.getVerdict(caseIdBigInt);
-      console.log("Stored verdict verified:", {
-        hash: storedHash,
-        timestamp: new Date(Number(timestamp.toString()) * 1000).toISOString(),
-      });
 
       // Close the case in backend
       await closeCaseMutation.mutateAsync({

@@ -104,6 +104,12 @@ function TrackCase() {
             </p>
             <p>
               <strong>
+                <Content>Booking Mode</Content>:
+              </strong>{" "}
+              <Content>{caseResult.schedule.mode}</Content>
+            </p>
+            <p>
+              <strong>
                 <Content>Mediation Mode</Content>:
               </strong>{" "}
               <Content>{caseResult.mediation_mode}</Content>
@@ -120,19 +126,13 @@ function TrackCase() {
               </strong>{" "}
               <Content>{caseResult.priority}</Content>
             </p>
-            {caseResult.scheduled_date && (
+            {caseResult.status === "In Progress" && (
               <>
                 <p>
                   <strong>
                     <Content>Schedule Date</Content>:
                   </strong>{" "}
                   {new Date(caseResult.scheduled_date).toLocaleString()}
-                </p>
-                <p>
-                  <strong>
-                    <Content>Booking Mode</Content>:
-                  </strong>{" "}
-                  <Content>{caseResult.schedule.booking_mode}</Content>
                 </p>
               </>
             )}
@@ -164,7 +164,8 @@ function TrackCase() {
               </strong>{" "}
               {caseResult.assigned_mediator}
             </p>
-            {caseResult.meet_link && (
+            {caseResult.status === "In Progress" &&
+            caseResult.mediation_mode === "Online" ? (
               <p className="text-sm">
                 <strong>
                   <Content>Meet Link</Content>:
@@ -187,6 +188,25 @@ function TrackCase() {
                   </span>
                 )}
               </p>
+            ) : (
+              <p className="text-sm">
+                <strong>
+                  <Content>Mediation Location</Content>:
+                </strong>{" "}
+                <Content>{caseResult.location}</Content>
+              </p>
+            )}
+            {caseResult.status === "Closed" && (
+              <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                <p className="text-sm">
+                  <strong>IPFS Hash: </strong>
+                  {caseResult.final_verdict.ipfs_hash}
+                </p>
+                <p className="text-sm">
+                  <strong>Summary: </strong>
+                  {caseResult.final_verdict.summary}
+                </p>
+              </div>
             )}
           </div>
         )}
